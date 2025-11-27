@@ -1,5 +1,6 @@
 import Listar from "./Listar";
 import Criar from "./Criar";
+import styled from "styled-components";
 
 
 const ConteudoExpandido = ({ ativo }) => {
@@ -7,7 +8,9 @@ const ConteudoExpandido = ({ ativo }) => {
     <>
       <Listar ativo={ativo} />
       <Criar ativo={ativo} />
+
     </>
+     
   );
 };
 

@@ -4,7 +4,7 @@ import Cadastro from './pages/Cadastro'
 import PaginaInicial from "./pages/PaginaInicial";
 
 
-export default function App(){
+export default function Rotas(){
     return(
     <BrowserRouter>
         <Routes>
