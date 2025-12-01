@@ -24,7 +24,7 @@ const Container = styled.div`
   border-radius: 10px;
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 60VW;
   cursor: pointer;
 `;
 
@@ -43,24 +43,23 @@ const ContatoInicial = styled.h2`
 
 const DivDetalhes = styled.div`
   background-color: #fff;
-  padding: 25px 30px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  overflow: hidden;
+  max-height: 0;
   opacity: 0;
-  transform: translateY(-8px);
-  pointer-events: none; 
-  transition: opacity .32s ease, transform .32s ease;
+  padding: 0 30px;
+  transition: max-height .35s ease, opacity .25s ease, padding .35s ease;
   margin-bottom: 8px;
 
   &.ativo {
+    max-height: 500px; 
     opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+    padding: 25px 30px;
   }
 `;
+
+
 
 const Span = styled.span`
   font-weight: bold;
@@ -109,11 +108,16 @@ const Listar = ({ ativo }) => {
     },
   ];
 
-  const [aberto, setAberto] = useState(null);
+  const [aberto, setAberto] = useState([]);
 
   function toggleContato(index) {
-    setAberto((prev) => (prev === index ? null : index));
-  }
+    
+    setAberto(prev => 
+    prev.includes(index)
+      ? prev.filter(i => i !== index) 
+      : [...prev, index]              
+  );
+}
 
   return (
     <>
@@ -122,52 +126,53 @@ const Listar = ({ ativo }) => {
           <Pesquisa />
 
           {contatos.map((contato, index) => (
-            <div key={index}>
+  <div key={index}>
+    
+    <Container onClick={() => toggleContato(index)}>
+      <MaiorQue
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        role="img"
+        style={{
+          transform: aberto === index ? "rotate(90deg)" : "rotate(0deg)",
+        }}
+      >
+        <polyline
+          points="8 6 16 12 8 18"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </MaiorQue>
 
-              <Container onClick={() => toggleContato(index)}>
-                <MaiorQue
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  role="img"
-                  style={{
-                    transform: aberto === index ? "rotate(90deg)" : "rotate(0deg)",
-                  }}
-                >
-                  <polyline
-                    points="8 6 16 12 8 18"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </MaiorQue>
+      <ContatoInicial>{contato.nome}</ContatoInicial>
+    </Container>
 
-                <ContatoInicial>{contato.nome}</ContatoInicial>
-              </Container>
+      <DivDetalhes className={aberto.includes(index) ? "ativo" : ""}>
+        <Informacoes>
+          <p>
+            <Span>Telefone:</Span> {contato.telefone}
+          </p>
+          <p>
+            <Span>Email:</Span> {contato.email}
+          </p>
+          <p>
+            <Span>Empresa:</Span> {contato.empresa}
+          </p>
+          <p>
+            <Span>Cargo:</Span> {contato.cargo}
+          </p>
+          <p>
+            <Span>Setor:</Span> {contato.setor}
+          </p>
+        </Informacoes>
+      </DivDetalhes>
 
-              <DivDetalhes className={aberto === index ? "ativo" : ""}>
-                <Informacoes>
-                  <p>
-                    <Span>Telefone:</Span> {contato.telefone}
-                  </p>
-                  <p>
-                    <Span>Email:</Span> {contato.email}
-                  </p>
-                  <p>
-                    <Span>Empresa:</Span> {contato.empresa}
-                  </p>
-                  <p>
-                    <Span>Cargo:</Span> {contato.cargo}
-                  </p>
-                  <p>
-                    <Span>Setor:</Span> {contato.setor}
-                  </p>
-                </Informacoes>
-              </DivDetalhes>
+  </div>
+))}
 
-            </div>
-          ))}
         </DivExpandido>
       )}
     </>
