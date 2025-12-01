@@ -36,10 +36,6 @@ const FundoStyled = styled(Fundo)`
 
   const Login = () => {
 
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [erro, setErro] = useState("");
-
   async function fazLogin(e) {
     e.preventDefault();
 

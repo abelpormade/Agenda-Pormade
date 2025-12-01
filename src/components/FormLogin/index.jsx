@@ -79,10 +79,10 @@ export default function LoginDiv() {
 
       const dados = await resposta.json();
 
-      // 👉 salvar token no localStorage
+      //  salvar token no localStorage
       localStorage.setItem("token", dados.access_token);
 
-      // 👉 redirecionar após login
+      //  redirecionar após login
       navigate("/paginainicial");
 
     } catch (e) {
