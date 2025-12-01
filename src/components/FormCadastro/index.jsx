@@ -1,15 +1,7 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import {  useState } from "react"
 import {GuardaForm, FundoForm, Inputs} from '../FormLogin' 
 import Botao from '../Botao';
-
-
-const H2Cadastro=styled.h2`
-  color: #fff;
-  margin-top: auto;
-  font-size: 40px;
-  margin-bottom: 0;
-`
+import { Textoh2 } from "../FormLogin"
 
 export default function CadastroDiv  (){
 const [nome, setNome] = useState('');
@@ -49,11 +41,11 @@ const [nome, setNome] = useState('');
 
 return(
 <GuardaForm>
-<FundoForm $height="60%" $Gap="45px">
+<FundoForm $height="52vh" $Gap="45px" $width="20vw">
   
-      <H2Cadastro>Cadastro</H2Cadastro>
+      <Textoh2 $marginbottom='0'>Cadastro</Textoh2>
 
-      <Inputs 
+      <Inputs $padding="18px"
         type="text" 
         value={nome} 
         placeholder='Nome'
@@ -62,7 +54,7 @@ return(
         autoComplete='off'
       />
 
-      <Inputs 
+      <Inputs $padding="18px"
         type="email"
         value={email}
         placeholder="E-mail"
@@ -71,7 +63,7 @@ return(
 
       />
 
-      <Inputs 
+      <Inputs $padding="18px"
         type="text" 
         value={cargo} 
         placeholder='Cargo'
@@ -80,7 +72,7 @@ return(
         autoComplete='off'
       />
 
-      <Inputs 
+      <Inputs  $padding="18px"
         type="password" 
         value={senha} 
         placeholder='Senha'
