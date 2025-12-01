@@ -29,6 +29,11 @@ const Search = styled.input`
   outline: none;
   display: block;
 
+  &::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
   &:focus {
     box-shadow: 0 0 0 1px #575656 inset;
   }

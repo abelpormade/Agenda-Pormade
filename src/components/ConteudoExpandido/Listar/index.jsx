@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Pesquisa from "../../Pesquisa";
 import { useState } from "react";
-import { style } from "framer-motion/client";
 
 export const DivExpandido = styled.div`
   position: relative;
@@ -13,33 +12,36 @@ export const DivExpandido = styled.div`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   margin: 3% 5% 0 25%;
   display: flex;
-  gap: 50px;
+  gap: 20px;
   align-items: center;
   flex-direction: column;
+  padding-top: 25px;
 `;
 
 const Container = styled.div`
   background-color: red;
-
   height: 8vh;
   border-radius: 10px;
   display: flex;
   align-items: center;
-`;
-
-const MaiorQue = styled.svg`
-  width: 70px;
-  margin-left: 15px;
+  width: 100%;
   cursor: pointer;
 `;
 
+const MaiorQue = styled.svg`
+  width: 30px;
+  height: 30px;
+  margin-left: 15px;
+  transition: transform .28s ease;
+`;
+
 const ContatoInicial = styled.h2`
-  font-size: 32px;
+  font-size: 28px;
   font-weight: bold;
+  margin: 0 12px;
 `;
 
 const DivDetalhes = styled.div`
-  height: auto;
   background-color: #fff;
   padding: 25px 30px;
   border-radius: 12px;
@@ -47,9 +49,18 @@ const DivDetalhes = styled.div`
   display: flex;
   flex-direction: column;
   gap: 18px;
-  transition: .3s ease;
-`;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none; 
+  transition: opacity .32s ease, transform .32s ease;
+  margin-bottom: 8px;
 
+  &.ativo {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+`;
 
 const Span = styled.span`
   font-weight: bold;
@@ -57,23 +68,16 @@ const Span = styled.span`
   color: #333;
 `;
 
-const JuntaDivs = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  width: 60vw;
-`;
-
 const Informacoes = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 22px 60px;
-  justify-content: flex-start;
 
   p {
-    font-size: 22px;
+    font-size: 20px;
     display: flex;
     gap: 8px;
+    margin: 0;
   }
 `;
 
@@ -81,18 +85,34 @@ const Listar = ({ ativo }) => {
   const contatos = [
     {
       nome: "Yasmin",
-      telefone: 426542132,
+      telefone: "426542132",
       email: "yasmin@pormade",
-      empresa: "pormade",
-      cargo: "trainee",
+      empresa: "Pormade",
+      cargo: "Trainee",
       setor: "TI",
+    },
+    {
+      nome: "João Silva",
+      telefone: "489998877",
+      email: "joao@pormade",
+      empresa: "Pormade",
+      cargo: "Analista",
+      setor: "TI",
+    },
+    {
+      nome: "Carla Souza",
+      telefone: "319445577",
+      email: "carla@pormade",
+      empresa: "Pormade",
+      cargo: "Gestora",
+      setor: "RH",
     },
   ];
 
-  const [contatoAberto, setContatoAberto] = useState(false);
+  const [aberto, setAberto] = useState(null);
 
-  function AbreContato() {
-    setContatoAberto(!contatoAberto);
+  function toggleContato(index) {
+    setAberto((prev) => (prev === index ? null : index));
   }
 
   return (
@@ -101,50 +121,53 @@ const Listar = ({ ativo }) => {
         <DivExpandido>
           <Pesquisa />
 
-          <JuntaDivs>
-            {" "}
-            <Container>
-              <MaiorQue
-                onClick={AbreContato}
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                role="img"
-              >
-                <polyline
-                  points="8 6 16 12 8 18"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </MaiorQue>
+          {contatos.map((contato, index) => (
+            <div key={index}>
 
-              <ContatoInicial>{contatos[0].nome}</ContatoInicial>
-            </Container>
-            {contatoAberto && (
-             <DivDetalhes>
-  <Informacoes>
-    <p>
-      <Span>Telefone:</Span> {contatos[0].telefone}
-    </p>
-    <p>
-      <Span>Email:</Span> {contatos[0].email}
-    </p>
-    <p>
-      <Span>Empresa:</Span> {contatos[0].empresa}
-    </p>
-    <p>
-      <Span>Cargo:</Span> {contatos[0].cargo}
-    </p>
-    <p>
-      <Span>Setor:</Span> {contatos[0].setor}
-    </p>
-  </Informacoes>
-</DivDetalhes>
+              <Container onClick={() => toggleContato(index)}>
+                <MaiorQue
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  role="img"
+                  style={{
+                    transform: aberto === index ? "rotate(90deg)" : "rotate(0deg)",
+                  }}
+                >
+                  <polyline
+                    points="8 6 16 12 8 18"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </MaiorQue>
 
-            )}
-          </JuntaDivs>
+                <ContatoInicial>{contato.nome}</ContatoInicial>
+              </Container>
+
+              <DivDetalhes className={aberto === index ? "ativo" : ""}>
+                <Informacoes>
+                  <p>
+                    <Span>Telefone:</Span> {contato.telefone}
+                  </p>
+                  <p>
+                    <Span>Email:</Span> {contato.email}
+                  </p>
+                  <p>
+                    <Span>Empresa:</Span> {contato.empresa}
+                  </p>
+                  <p>
+                    <Span>Cargo:</Span> {contato.cargo}
+                  </p>
+                  <p>
+                    <Span>Setor:</Span> {contato.setor}
+                  </p>
+                </Informacoes>
+              </DivDetalhes>
+
+            </div>
+          ))}
         </DivExpandido>
       )}
     </>
