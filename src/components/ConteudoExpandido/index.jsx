@@ -1,17 +1,19 @@
 import Listar from "./Listar";
-import Criar from "./Criar";
 
 
-const ConteudoExpandido = ({ ativo }) => {
+
+
+
+const ConteudoExpandido = ({ ativo, contatos, loading, erro }) => {
   return (
     <>
-      <Listar ativo={ativo} />
-      <Criar ativo={ativo} />
-
+      {ativo === "listar" && (
+        <Listar contatos={contatos} loading={loading} erro={erro} ativo={ativo} />
+      )}
     </>
-     
   );
 };
+
 
 export default ConteudoExpandido;
 

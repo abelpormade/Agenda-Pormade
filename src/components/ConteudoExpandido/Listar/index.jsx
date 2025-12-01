@@ -59,8 +59,6 @@ const DivDetalhes = styled.div`
   }
 `;
 
-
-
 const Span = styled.span`
   font-weight: bold;
   font-size: 22px;
@@ -80,44 +78,28 @@ const Informacoes = styled.div`
   }
 `;
 
-const Listar = ({ ativo }) => {
-  const contatos = [
-    {
-      nome: "Yasmin",
-      telefone: "426542132",
-      email: "yasmin@pormade",
-      empresa: "Pormade",
-      cargo: "Trainee",
-      setor: "TI",
-    },
-    {
-      nome: "João Silva",
-      telefone: "489998877",
-      email: "joao@pormade",
-      empresa: "Pormade",
-      cargo: "Analista",
-      setor: "TI",
-    },
-    {
-      nome: "Carla Souza",
-      telefone: "319445577",
-      email: "carla@pormade",
-      empresa: "Pormade",
-      cargo: "Gestora",
-      setor: "RH",
-    },
-  ];
-
+const Listar = ({ ativo, contatos, loading, erro }) => {
   const [aberto, setAberto] = useState([]);
 
+
+  // fallback local se API falhar
+  /*const dadosLocais = [
+    { id_usuario: 1, nome: "Usuário Local 1", email: "local1@email.com" },
+    { id_usuario: 2, nome: "Usuário Local 2", email: "local2@email.com" }
+  ];
+
+  // se houver erro OU se a API retornou vazio → usa dados locais
+  const usuariosRender = erro || usuarios.length === 0 ? dadosLocais : usuarios;
+*/
+
+
   function toggleContato(index) {
-    
-    setAberto(prev => 
-    prev.includes(index)
-      ? prev.filter(i => i !== index) 
-      : [...prev, index]              
-  );
-}
+    setAberto(prev =>
+      prev.includes(index)
+        ? prev.filter(i => i !== index)
+        : [...prev, index]
+    );
+  }
 
   return (
     <>
@@ -125,53 +107,46 @@ const Listar = ({ ativo }) => {
         <DivExpandido>
           <Pesquisa />
 
+          {loading && <h2>Carregando...</h2>}
+          {erro && <h2 style={{ color: "red" }}>{erro}</h2>}
+
+          {!loading && contatos.length === 0 && <h2>Nenhum contato encontrado.</h2>}
+
           {contatos.map((contato, index) => (
-  <div key={index}>
-    
-    <Container onClick={() => toggleContato(index)}>
-      <MaiorQue
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        role="img"
-        style={{
-          transform: aberto === index ? "rotate(90deg)" : "rotate(0deg)",
-        }}
-      >
-        <polyline
-          points="8 6 16 12 8 18"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </MaiorQue>
+            <div key={index}>
+              <Container onClick={() => toggleContato(index)}>
+                <MaiorQue
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  role="img"
+                  style={{
+                    transform: aberto.includes(index) ? "rotate(90deg)" : "rotate(0deg)",
+                  }}
+                >
+                  <polyline
+                    points="8 6 16 12 8 18"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </MaiorQue>
 
-      <ContatoInicial>{contato.nome}</ContatoInicial>
-    </Container>
+                <ContatoInicial>{contato.nome}</ContatoInicial>
+              </Container>
 
-      <DivDetalhes className={aberto.includes(index) ? "ativo" : ""}>
-        <Informacoes>
-          <p>
-            <Span>Telefone:</Span> {contato.telefone}
-          </p>
-          <p>
-            <Span>Email:</Span> {contato.email}
-          </p>
-          <p>
-            <Span>Empresa:</Span> {contato.empresa}
-          </p>
-          <p>
-            <Span>Cargo:</Span> {contato.cargo}
-          </p>
-          <p>
-            <Span>Setor:</Span> {contato.setor}
-          </p>
-        </Informacoes>
-      </DivDetalhes>
-
-  </div>
-))}
+              <DivDetalhes className={aberto.includes(index) ? "ativo" : ""}>
+                <Informacoes>
+                  <p><Span>Telefone:</Span> {contato.telefone}</p>
+                  <p><Span>Email:</Span> {contato.email}</p>
+                  <p><Span>Empresa:</Span> {contato.empresa}</p>
+                  <p><Span>Cargo:</Span> {contato.cargo}</p>
+                  <p><Span>Setor:</Span> {contato.setor}</p>
+                </Informacoes>
+              </DivDetalhes>
+            </div>
+          ))}
 
         </DivExpandido>
       )}

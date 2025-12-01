@@ -10,7 +10,7 @@ export const GuardaForm = styled.div`
   align-items: center;
   height: 100vh;
 `;
-export const FundoForm = styled.div`
+export const FundoForm = styled.form`
   position: relative;
   background-color: rgba(0, 0, 0, 0.7);
   padding: 40px;
@@ -22,25 +22,22 @@ export const FundoForm = styled.div`
   height: ${({ $height }) => $height || "auto"};
   gap: ${({ $Gap }) => $Gap || "30px"};
 `;
+
 export const Textoh2 = styled.h2`
-  color: white;
-  margin-top: 10px;
-  margin-bottom: ${({$marginbottom}) =>$marginbottom || '10px'};
   color: #fff;
   font-size: 60px;
 `;
 
 export const Inputs = styled.input`
-background-color: rgba(217, 217, 217, 0.8);
+  background-color: rgba(217, 217, 217, 0.8);
   width: 85%;
   height: 56px;
-  padding: ${({ $padding }) => $padding || "0 8px"};
   border-radius: 10px;
   border: none;
   outline: none;
   font-size: 20px;
 
-  &::placeholder{
+  &::placeholder {
     color: white;
   }
 `;
@@ -48,8 +45,6 @@ background-color: rgba(217, 217, 217, 0.8);
 const SpanParagrafo = styled.span`
   color: #00b000;
   cursor: pointer;
-  text-decoration: none;
-
   &:hover {
     text-decoration: underline;
   }
@@ -60,32 +55,51 @@ export default function LoginDiv() {
 
   const [login, setLogin] = useState("");
   const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Login:", login, "Senha:", senha);
+    setErro("");
+
+    try {
+      const resposta = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: login,
+          senha: senha,
+        }),
+      });
+
+      if (!resposta.ok) {
+        setErro("Login ou senha incorretos.");
+        return;
+      }
+
+      const dados = await resposta.json();
+
+      // 👉 salvar token no localStorage
+      localStorage.setItem("token", dados.access_token);
+
+      // 👉 redirecionar após login
+      navigate("/paginainicial");
+
+    } catch (e) {
+      setErro("Erro ao conectar com o servidor.");
+    }
   };
 
   return (
     <GuardaForm>
       <FundoForm onSubmit={handleSubmit}>
-        <input
-          type="text"
-          style={{ position: "absolute", opacity: 0, height: 0, width: 0 }}
-        />
-        <input
-          type="password"
-          style={{ position: "absolute", opacity: 0, height: 0, width: 0 }}
-        />
-
         <Textoh2>Entrar</Textoh2>
+
         <Inputs
           type="text"
           placeholder="Login"
           value={login}
           onChange={(e) => setLogin(e.target.value)}
-          autoComplete="no-login-autocomplete"
         />
 
         <Inputs
@@ -93,18 +107,16 @@ export default function LoginDiv() {
           placeholder="Senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
-          autoComplete="off-senha"
         />
 
-        <Botao redirectTo={"/paginainicial"} />
+        {erro && <Paragrafo style={{ color: "red" }}>{erro}</Paragrafo>}
+
+       <Botao/>
 
         <Paragrafo $fontSize="20px" $fontalign="center">
           Não tem uma conta? 
-          <SpanParagrafo
-            onClick={() => navigate("/cadastro")}
-            style={{ cursor: "pointer" }}
-          >
-             Crie uma
+          <SpanParagrafo onClick={() => navigate("/cadastro")}>
+            Crie uma
           </SpanParagrafo>
         </Paragrafo>
       </FundoForm>

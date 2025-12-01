@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FundoBarra, FundoImgeTextos, ImgeTexto, LogoPormade, PormadeAgenda, TituloContainer } from "../../components/Barra";
 import Fundo from "../../components/Fundo";
 import Logo from "../../assets/images/folha.svg";
 import Nav from "../../components/Nav";
 import ConteudoExpandido from "../../components/ConteudoExpandido";
-import Pesquisa from "../../components/Pesquisa";
 
 const PaginaWrapper = styled.div`
   position: relative;
@@ -35,6 +34,32 @@ const ContainerPrincipal = styled.section`
 const PaginaInicial = () => {
   const [ativo, setAtivo] = useState("listar");
 
+  const [contatos, setContatos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState(null);
+
+  useEffect(() => {
+    async function carregar() {
+      try {
+        const token = localStorage.getItem("token");
+
+        const resposta = await fetch("http://localhost:3000/contatos",{
+            headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        });
+        const dados = await resposta.json();
+        setContatos(dados);
+      } catch (e) {
+        setErro("Erro ao carregar usuários");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    carregar();
+  }, []);
+
   return (
     <PaginaWrapper>
       <FundoContainer>
@@ -55,7 +80,13 @@ const PaginaInicial = () => {
 
           <Nav ativo={ativo} setAtivo={setAtivo} />
         </FundoBarra>
-        <ConteudoExpandido ativo={ativo} />
+
+        <ConteudoExpandido
+          ativo={ativo}
+          contatos={contatos}
+          loading={loading}
+          erro={erro}
+        />
       </ContainerPrincipal>
     </PaginaWrapper>
   );

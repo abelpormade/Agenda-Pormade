@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import '../Cadastro/Cadastro.css'
 import Barra from '../../components/Barra'
 import LoginDiv from '../../components/FormLogin'
+import { useEffect,useState } from 'react'
 
 export const Container = styled.div`
   position: relative; 
@@ -31,7 +32,46 @@ const FundoStyled = styled(Fundo)`
 `
 
 
-const Login=()=> {
+
+
+  const Login = () => {
+
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState("");
+
+  async function fazLogin(e) {
+    e.preventDefault();
+
+    try {
+      const resposta = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          senha
+        })
+      });
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        setErro(dados.message || "Erro ao fazer login");
+        return;
+      }
+
+      // salva token no navegador
+      localStorage.setItem("token", dados.access_token);
+
+
+
+
+    } catch (error) {
+      setErro("Erro no servidor");
+    }
+  }
+
+
   return (
     <Container>
       <FundoStyled />
@@ -42,6 +82,6 @@ const Login=()=> {
 </Container>
 
   )
-}
+  }
 
-export default Login
+export default Login;
