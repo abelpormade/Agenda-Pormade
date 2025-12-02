@@ -82,16 +82,6 @@ const Listar = ({ ativo, contatos, loading, erro }) => {
   const [aberto, setAberto] = useState([]);
 
 
-  // fallback local se API falhar
-  /*const dadosLocais = [
-    { id_usuario: 1, nome: "Usuário Local 1", email: "local1@email.com" },
-    { id_usuario: 2, nome: "Usuário Local 2", email: "local2@email.com" }
-  ];
-
-  // se houver erro OU se a API retornou vazio → usa dados locais
-  const usuariosRender = erro || usuarios.length === 0 ? dadosLocais : usuarios;
-*/
-
 
   function toggleContato(index) {
     setAberto(prev =>
@@ -100,6 +90,30 @@ const Listar = ({ ativo, contatos, loading, erro }) => {
         : [...prev, index]
     );
   }
+  const dadosLocais = [
+  {
+    id_usuario: 1,
+    nome: "Contato Exemplo 1",
+    telefone: "(11) 99999-1111",
+    email: "exemplo1@teste.com",
+    empresa: "Empresa X",
+    cargo: "Analista",
+    setor: "TI"
+  },
+  {
+    id_usuario: 2,
+    nome: "Contato Exemplo 2",
+    telefone: "(11) 99999-2222",
+    email: "exemplo2@teste.com",
+    empresa: "Empresa Y",
+    cargo: "Gerente",
+    setor: "Financeiro"
+  }
+];
+const contatosRender = (!loading && (erro || contatos.length === 0))
+  ? dadosLocais
+  : contatos;
+
 
   return (
     <>
@@ -110,9 +124,10 @@ const Listar = ({ ativo, contatos, loading, erro }) => {
           {loading && <h2>Carregando...</h2>}
           {erro && <h2 style={{ color: "red" }}>{erro}</h2>}
 
-          {!loading && contatos.length === 0 && <h2>Nenhum contato encontrado.</h2>}
+          {!loading && contatos.length === 0 && dadosLocais===null && <h2>Nenhum contato encontrado.</h2>}
 
-          {contatos.map((contato, index) => (
+          
+          {contatosRender.map((contato, index) => (
             <div key={index}>
               <Container onClick={() => toggleContato(index)}>
                 <MaiorQue
@@ -140,9 +155,10 @@ const Listar = ({ ativo, contatos, loading, erro }) => {
                 <Informacoes>
                   <p><Span>Telefone:</Span> {contato.telefone}</p>
                   <p><Span>Email:</Span> {contato.email}</p>
-                  <p><Span>Empresa:</Span> {contato.empresa}</p>
+                  <p><Span>Empresa:</Span> {contato.empresa.nome}</p>
                   <p><Span>Cargo:</Span> {contato.cargo}</p>
                   <p><Span>Setor:</Span> {contato.setor}</p>
+                   <p><Span>observações:</Span> {contato.observacoes}</p>
                 </Informacoes>
               </DivDetalhes>
             </div>

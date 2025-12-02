@@ -46,12 +46,20 @@ const PaginaInicial = () => {
         const resposta = await fetch("http://localhost:3000/contatos",{
             headers: {
           Authorization: `Bearer ${token}`,
+          
         },
         });
+
+     
         const dados = await resposta.json();
         setContatos(dados);
+
+
+
       } catch (e) {
+        if(!dadosLocais){
         setErro("Erro ao carregar usuários");
+        }
       } finally {
         setLoading(false);
       }
