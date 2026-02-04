@@ -97,7 +97,7 @@ export default function LoginDiv() {
 
         <Inputs
           type="text"
-          placeholder="Login"
+          placeholder="Email"
           value={login}
           onChange={(e) => setLogin(e.target.value)}
         />
