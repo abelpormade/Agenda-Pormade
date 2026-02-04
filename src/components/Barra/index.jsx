@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Logo from '../../assets/images/folha.svg'
+import Logo from '../../assets/folha.svg'
 
 export const FundoBarra = styled.div`
   position: absolute;

@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { FundoBarra, FundoImgeTextos, ImgeTexto, LogoPormade, PormadeAgenda, TituloContainer } from "../../components/Barra";
 import Fundo from "../../components/Fundo";
-import Logo from "../../assets/images/folha.svg";
+import Logo from "../../assets/folha.svg";
 import Nav from "../../components/Nav";
 import ConteudoExpandido from "../../components/ConteudoExpandido";
 import Pesquisa from "../../components/Pesquisa";
