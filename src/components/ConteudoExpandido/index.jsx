@@ -1,3 +1,4 @@
+
 import Listar from "./Listar";
 
 
@@ -10,6 +11,7 @@ const ConteudoExpandido = ({ ativo, contatos, loading, erro }) => {
       {ativo === "listar" && (
         <Listar contatos={contatos} loading={loading} erro={erro} ativo={ativo} />
       )}
+
     </>
   );
 };

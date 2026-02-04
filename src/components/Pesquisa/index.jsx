@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Perfil from "../../assets/images/perfil.png";
-import Lupa from "../../assets/images/lupa.png";
+import Perfil from "../../assets/profile.svg";
+import Lupa from "../../assets/lupa.svg";
 
 export const FundoPesquisa = styled.div`
   width: 100%;
