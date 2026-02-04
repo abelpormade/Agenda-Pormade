@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import fundoImg from "../../assets/images/img-login.jpg";
+import fundoImg from "../../assets/img-login.jpg";
 
 export const FundoFundo = styled.div`
 background-color: #252323;
